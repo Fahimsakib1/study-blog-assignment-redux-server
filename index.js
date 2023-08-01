@@ -36,6 +36,12 @@ async function run() {
         
         //////////////////////////// Redux Thunk Assignment 1 Codes Starts ///////////////////////////////
         
+        app.post('/addBlog', async (req, res) => {
+            const blog = req.body;
+            const result = await blogsCollection.insertOne(blog);
+            res.send(result);
+        })
+        
         app.get('/blogs', async (req, res) => {
             const query = {}
             const result = await blogsCollection.find(query).toArray()
@@ -46,6 +52,40 @@ async function run() {
             const id = req.params.id
             const query = {_id: new ObjectId(id) }
             const result = await blogsCollection.findOne(query);
+            res.send(result);
+        })
+
+        app.delete('/deleteBlog/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id)};
+            const result = await blogsCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+        app.get('/allBlogs/blog/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await blogsCollection.findOne(query);
+            res.send(result);
+        })
+
+        //Update a Blog
+        app.put('/updateBlog/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const updateBlogInfo = req.body;
+            const options = { upsert: true }
+            const updatedDoc = {
+                $set: {
+                    title: updateBlogInfo.title,
+                    image: updateBlogInfo.image,
+                    category: updateBlogInfo.category,
+                    blogUpdatedTime: updateBlogInfo.blogUpdatedTime,
+                    description: updateBlogInfo.description,
+                }
+            }
+
+            const result = await blogsCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
 
