@@ -89,6 +89,91 @@ async function run() {
             res.send(result);
         })
 
+        //get all the blogs in order to sort by First Upload Blogs will be at first
+        app.get('/blogs/sortByFirstUpload', async (req, res) => {
+            const query = { }
+            const result = await blogsCollection.find(query).sort({ ISOSPostedDate:1 }).toArray();
+            // const message = "SortedByFirstUpload"
+            // res.send({message, result});
+            res.send(result);
+        })
+
+        //get all the blogs in order to sort by First Upload Blogs will be at first
+        app.get('/blogs/sortByLastUpload', async (req, res) => {
+            const query = { }
+            const result = await blogsCollection.find(query).sort({ ISOSPostedDate:-1 }).toArray();
+            // const message = "SortedByLastUpload"
+            // res.send({message, result});
+            res.send(result);
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        app.get('/blogSortByFirstUpload/:number', async (req, res) => {
+            const number = req.params.number
+            const query = { }
+            const result = await blogsCollection.find(query).sort({ ISOSPostedDate: number }).toArray();
+            // const message = "SortedByLastUpload"
+            // res.send({message, result});
+            res.send(result);
+        })
+
+        app.get('/blogSortByLastUpload/:number', async (req, res) => {
+            const number = req.params.number
+            const query = { }
+            const result = await blogsCollection.find(query).sort({ ISOSPostedDate: - number }).toArray();
+            // const message = "SortedByLastUpload"
+            // res.send({message, result});
+            res.send(result);
+        })
+
+
+        app.get('/clearFilters/:queryType', async (req, res) => {
+            const queryType = req.params.queryType;
+            console.log("Query Type: " , queryType);
+            const query = {};
+            const result = await blogsCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        //get blogs by category after searching
+        app.get('/blogs/:category', async (req, res) => {
+            const category = req.params.category;
+            const query = {category : category};
+            const result = await blogsCollection.find(query).toArray();
+            res.send(result);
+        })
+
+
     }
     finally {
 
